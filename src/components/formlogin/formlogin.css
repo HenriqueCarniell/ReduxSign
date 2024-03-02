@@ -1,0 +1,13 @@
+#ContainerLogin {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+form {
+    width: 30rem;
+    border: 1px solid black;
+    padding: 50px;
+    border-radius: 8px;
+}
