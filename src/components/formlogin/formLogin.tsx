@@ -1,8 +1,11 @@
-
+import './formlogin.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import './formlogin.css'
+//redux
+import { useDispatch, useSelector } from 'react-redux';
+import {LoginUser} from '../redux/user/action';
 
+//bootstrap
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { ChangeEvent, useState } from 'react';
@@ -14,6 +17,8 @@ function FormLogin() {
     const [saveEmail, setEmail] = useState<string>('')
     const [saveSenha, setSenha] = useState<string>('')
 
+    const dispatch = useDispatch()
+
     let HandleSaveEmail = (e: ChangeEvent<HTMLInputElement>): void => {
         setEmail(e.target.value)
     }
@@ -22,7 +27,11 @@ function FormLogin() {
         setSenha(e.target.value)
     }
 
-    let nav = useNavigate()
+    const {currentUser} = useSelector((state: { userReducer: any, currentUser: null | string}) => state.userReducer);
+
+    console.log(currentUser);
+
+    let nav = useNavigate();
 
     let HandleSendLoginData = async () => {
         try {
@@ -30,18 +39,19 @@ function FormLogin() {
                 EmailLogin: saveEmail,
                 PasswordLogin: saveSenha,
             });
-    
-            if(response.data.msg !== "usuario não existe") {
-                nav("/Home")
-            }
-            console.log(response.data.user)
 
-            //colocar response.data.user no redux
+            if (response.data.token) {
+                nav("/Home");
+            } else {
+                nav("/login")
+            }
+
+            dispatch(LoginUser(response.data.user));
+
         } catch (err) {
             console.log(err);
         }
     }
-    
 
     return (
         <div id="ContainerLogin">

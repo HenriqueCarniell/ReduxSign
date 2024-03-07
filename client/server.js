@@ -4,7 +4,7 @@ const cors = require('cors');
 const porta = 4000;
 const db = require('./db');
 const jwt = require('jsonwebtoken');
-const auth = require('./auth')
+const auth = require('./auth');
 
 // Confings
 app.use(cors());

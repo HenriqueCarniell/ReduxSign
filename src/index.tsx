@@ -5,6 +5,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import FormLogin from './components/formlogin/formLogin';
 import FormCreateAccount from './components/formCreateAccount/formCreateAccount';
 import Home from './components/home/home';
+import { Provider } from 'react-redux';
+import store from './components/redux/store';
 
 
 const root = ReactDOM.createRoot(
@@ -12,13 +14,15 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-    <Routes>
-    <Route path='/home' element={<Home/>}></Route>
-      <Route path='/login' element={<FormLogin/>}></Route>
-      <Route path='/createaccount' element={<FormCreateAccount/>}></Route>
-    </Routes>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/home' element={<Home/>} />
+          <Route path='/login' element={<FormLogin/>} />
+          <Route path='/createaccount' element={<FormCreateAccount/>} />
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );
 
