@@ -8,9 +8,9 @@ import {LoginUser} from '../redux/user/action';
 //bootstrap
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+
 
 function FormLogin() {
 
@@ -31,8 +31,6 @@ function FormLogin() {
 
     console.log(currentUser);
 
-    let nav = useNavigate();
-
     let HandleSendLoginData = async () => {
         try {
             let response = await axios.post('http://localhost:4000/send/login/dados', {
@@ -40,17 +38,22 @@ function FormLogin() {
                 PasswordLogin: saveSenha,
             });
 
-            if (response.data.token) {
-                nav("/Home");
-            } else {
-                nav("/login")
-            }
+            localStorage.setItem("@rocketnotes:user", JSON.stringify(response.data.user))
+            localStorage.setItem("@rocketnotes:token", response.data.token)
 
             dispatch(LoginUser(response.data.user));
-
         } catch (err) {
             console.log(err);
         }
+
+        useEffect(() => {
+            const token = localStorage.getItem("@rocketnotes:token")
+            const user = localStorage.getItem("@rocketnotes:user")
+    
+            if(token && user) {
+                axios.defaults.headers.authorization = `Bearer ${token}`
+            }
+        },[])
     }
 
     return (

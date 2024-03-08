@@ -5,28 +5,33 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import FormLogin from './components/formlogin/formLogin';
 import FormCreateAccount from './components/formCreateAccount/formCreateAccount';
 import Home from './components/home/home';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import store from './components/redux/store';
 
+const App = () => {
+  const {currentUser} = useSelector((state: { userReducer: any}) => state.userReducer);
+  console.log(currentUser);
+  return (
+    
+    <BrowserRouter>
+            {currentUser ? <Home/> : <FormLogin/> }
+      <Routes>
+        <Route path='/createaccount' element={<FormCreateAccount/>} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route path='/home' element={<Home/>} />
-          <Route path='/login' element={<FormLogin/>} />
-          <Route path='/createaccount' element={<FormCreateAccount/>} />
-        </Routes>
-      </BrowserRouter>
+      <App />
     </Provider>
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
